@@ -9,44 +9,160 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const employees = []
+
 
 function getTeamInfo() {
-    inquirer.prompt([
+    console.log("Welcome to the team builder!");
+
+    const addEmployee = () => {
+        inquirer.prompt([
         {
-            type: "input",
-            name: "managerName",
-            message: "What is the Manager's name?"
-        },
-        {
-            type: "input",
-            name: "managerId",
-            message: "What is the Manager's ID?"
-        },
-        {
-            type: "input",
-            name: "managerEmail",
-            message: "What is the Manager's email address?"
-        },
-        {
-            type: "input",
-            name: "managerOfficeNumber",
-            message: "What is the Manager's office number?"
+            type: "list",
+            name: "addingChoice",
+            message: "Would you like to add an employee?",
+            choices: ["Yes", "No"]
         }
-    ]).then(answers => {
-        const manager = new Manager(
-            answers.managerName, 
-            answers.managerId, 
-            answers.managerEmail, 
-            answers.managerOfficeNumber
-        );
-    });
+        ]).then( async answer => {
+            if (answer.addingChoice === "Yes") {
+                await inquirer.prompt([
+                    {
+                        type: "list",
+                        name: "employeeRole",
+                        message: "What is the next employee's role?",
+                        choices: ["Manager", "Engineer", "Intern"]
+                    }
+                ]).then( async answer => {
+                    console.log(answer.employeeRole);
+                    if (answer.employeeRole === "Manager") {
+                        await inquirer.prompt([
+                            {
+                                type: "input",
+                                name: "managerName",
+                                message: "What is the Manager's name?"
+                            },
+                            {
+                                type: "input",
+                                name: "managerId",
+                                message: "What is the Manager's ID?"
+                            },
+                            {
+                                type: "input",
+                                name: "managerEmail",
+                                message: "What is the Manager's email address?"
+                            },
+                            {
+                                type: "input",
+                                name: "managerOfficeNumber",
+                                message: "What is the Manager's office number?"
+                            }
+                        ]).then(answers => {
+                            const manager = new Manager(
+                                answers.managerName, 
+                                answers.managerId, 
+                                answers.managerEmail, 
+                                answers.managerOfficeNumber
+                            );
+
+                            addEmployee();
+
+                        })
+                    } 
+
+                    else  if (answer.employeeRole === "Engineer") {
+                        await inquirer.prompt([
+                            {
+                                type: "input",
+                                name: "engineerName",
+                                message: "What is the Engineer's name?"
+                            },
+                            {
+                                type: "input",
+                                name: "engineerId",
+                                message: "What is the Engineer's ID?"
+                            },
+                            {
+                                type: "input",
+                                name: "engineerEmail",
+                                message: "What is the Engineer's email address?"
+                            },
+                            {
+                                type: "input",
+                                name: "engineerGithub",
+                                message: "What is the Engineer's GitHub username?"
+                            }
+                        ]).then(answers => {
+                            const engineer = new Engineer(
+                                answers.engineerName, 
+                                answers.engineerId, 
+                                answers.engineerEmail, 
+                                answers.engineerGithub
+                            );
+
+
+                            addEmployee();
+
+                        })                    
+                    }
+
+                    else  if (answer.employeeRole === "Intern") {
+                        await inquirer.prompt([
+                            {
+                                type: "input",
+                                name: "internName",
+                                message: "What is the Intern's name?"
+                            },
+                            {
+                                type: "input",
+                                name: "internId",
+                                message: "What is the Intern's ID?"
+                            },
+                            {
+                                type: "input",
+                                name: "internEmail",
+                                message: "What is the Intern's email address?"
+                            },
+                            {
+                                type: "input",
+                                name: "internSchool",
+                                message: "What is the Intern's school?"
+                            }
+                        ]).then(answers => {
+                            const intern = new Intern(
+                                answers.internName, 
+                                answers.internId, 
+                                answers.internEmail, 
+                                answers.internSchool
+                            );
+
+                            console.log(intern);
+
+
+                            addEmployee();
+
+                        })                    
+                    }
+                
+                })
+
+            } else if (answer.addingChoice === "No") {
+                render(employees);
+            }
+        })
+
+    }
+
+    addEmployee();
+    
+
 };
 
 getTeamInfo();
 
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+
+
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
