@@ -4,3 +4,4 @@ This application is a Node CLI that takes in information about employees and gen
 
 Inquirer is used to gather the info from prompts, then classes/constructors are used to save and generate the info about each employee.
 
+![](https://raw.githubusercontent.com/tmylesc/employee-summary/master/images/screenshot.png)
